@@ -1,0 +1,26 @@
+
+const express = require('express');
+const mongoose = require('mongoose');
+const app = express();
+const port = 2500;
+
+
+const mongoURL = 'mongodb://localhost:27017/ReactN';
+mongoose.connect(mongoURL);
+
+const Schema = mongoose.Schema
+const state = new Schema({
+  data: Schema.Types.Mixed
+})
+
+const stateData = mongoose.model('student',state);
+
+app.get('/storeData',async(req,res)=>{
+  console.log(`Hello World!!`);
+  const allData = await stateData.find();
+  res.status(202).json(allData);
+})
+
+app.listen(port,()=>{
+  console.log(`Server is running on ${port}`)
+})
