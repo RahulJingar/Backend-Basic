@@ -1,0 +1,41 @@
+const express = require('express');
+const mongoose = require('mongoose');
+const app = express();
+const port = 8080;
+
+const mongoURL = 'mongodb://127.0.0.1:27017/ReactN';
+
+mongoose.connect(mongoURL)
+.then(()=>console.log(`mongoose connected successfully`))
+.catch((error)=>console.log(`error in connection`,error))
+
+const Schema = mongoose.Schema
+
+const state = new Schema({
+  data: Schema.Types.Mixed
+})
+
+const stateData = mongoose.model("students",state);
+
+app.get('/allData',async(req,res)=>{
+  const getData = await stateData.find();
+  console.log(`>>>>getData>>>>>`,getData);
+  res.status(200).json(getData);
+})
+
+
+
+app.get('/uniqueOne',async(req,res)=>{
+  const id = req.query.id;
+  console.log(`>>>>>>>>queryId>>>>>>>`,id);
+  const uniqOne = await stateData.findById(id);
+  console.log(`>>>>>uniqOne>>>>>>`,uniqOne)
+  res.status(200).json(uniqOne)
+})
+
+
+app.listen(port,()=>{
+  console.log(`server is running on ${port}`);
+})
+
+
